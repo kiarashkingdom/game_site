@@ -29,7 +29,7 @@ game-site/
 └── templates/
 ```
 ---
-###⭐ Star if you like it!
+### ⭐ Star if you like it!
 
 
 ---
