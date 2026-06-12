@@ -25,7 +25,6 @@ Python + Flask
 game-site/
 ├── app.py
 ├── requirements.txt
-├── Procfile
 └── templates/
 ```
 ---
