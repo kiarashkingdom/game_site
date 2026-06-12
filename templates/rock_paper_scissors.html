@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سنگ کاغذ قیچی</title>
+    <style>
+        body {
+            font-family: 'Tahoma', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .game-container {
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .back-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        
+        .back-btn:hover {
+            background: #764ba2;
+        }
+        
+        .game-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 30px;
+            font-size: 100px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .player-box, .bot-box {
+            flex: 1;
+        }
+        
+        .choices {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            font-size: 50px;
+            padding: 15px 30px;
+            cursor: pointer;
+            background: white;
+            border: 3px solid #667eea;
+            border-radius: 20px;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: scale(1.1);
+            background: #f0f0f0;
+        }
+        
+        #result {
+            font-size: 28px;
+            margin-top: 30px;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            border-radius: 15px;
+        }
+        
+        .score {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+            color: #666;
+        }
+        
+        @media (max-width: 600px) {
+            .game-area {
+                font-size: 60px;
+            }
+            
+            button {
+                font-size: 40px;
+                padding: 10px 20px;
+            }
+            
+            .game-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <button class="back-btn" onclick="location.href='/'">← بازگشت به صفحه اصلی</button>
+        <h1>✊ سنگ کاغذ قیچی ✌️</h1>
+        
+        <div class="game-area">
+            <div class="player-box">
+                <div>شما</div>
+                <div id="user-choice">❔</div>
+            </div>
+            <div>VS</div>
+            <div class="bot-box">
+                <div>ربات</div>
+                <div id="bot-choice">❔</div>
+            </div>
+        </div>
+        
+        <div class="choices">
+            <button onclick="play(0)">✊</button>
+            <button onclick="play(1)">🖐️</button>
+            <button onclick="play(2)">✌️</button>
+        </div>
+        
+        <div id="result">انتخاب کنید...</div>
+        <div class="score" id="score">امتیاز: شما 0 - 0 ربات</div>
+    </div>
+    
+    <script>
+        const hands = ['✊', '🖐️', '✌️'];
+        let userScore = 0;
+        let botScore = 0;
+        
+        function updateScore() {
+            document.getElementById('score').innerText = `امتیاز: شما ${userScore} - ${botScore} ربات`;
+        }
+        
+        function play(userIndex) {
+            const botIndex = Math.floor(Math.random() * 3);
+            
+            document.getElementById('user-choice').innerText = hands[userIndex];
+            document.getElementById('bot-choice').innerText = hands[botIndex];
+            
+            if (userIndex === botIndex) {
+                document.getElementById('result').innerHTML = "🤝 مساوی شد! 🤝";
+                document.getElementById('result').style.background = "#e3f2fd";
+                document.getElementById('result').style.color = "#1976d2";
+            } else if (
+                (userIndex === 0 && botIndex === 2) ||
+                (userIndex === 1 && botIndex === 0) ||
+                (userIndex === 2 && botIndex === 1)
+            ) {
+                document.getElementById('result').innerHTML = "🎉 بردی! آفرین 🎉";
+                document.getElementById('result').style.background = "#c8e6c9";
+                document.getElementById('result').style.color = "#2e7d32";
+                userScore++;
+            } else {
+                document.getElementById('result').innerHTML = "💔 باختی! دوباره امتحان کن 💔";
+                document.getElementById('result').style.background = "#ffcdd2";
+                document.getElementById('result').style.color = "#c62828";
+                botScore++;
+            }
+            
+            updateScore();
+        }
+    </script>
+</body>
+</html>

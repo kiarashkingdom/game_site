@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حدس عدد</title>
+    <style>
+        body {
+            font-family: 'Tahoma', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .game-container {
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .back-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        
+        input {
+            width: 80%;
+            padding: 15px;
+            font-size: 18px;
+            margin: 20px 0;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .guess-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        
+        .message {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 18px;
+        }
+        
+        .attempts {
+            color: #666;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <button class="back-btn" onclick="location.href='/'">← بازگشت</button>
+        <h1>🔢 حدس عدد 🔢</h1>
+        <p>یه عدد بین 1 تا 100 انتخاب کردم...</p>
+        
+        <input type="number" id="guess" placeholder="عدده رو وارد کن...">
+        <br>
+        <button class="guess-btn" onclick="checkGuess()">حدس بزن!</button>
+        
+        <div id="message" class="message"></div>
+        <div id="attempts" class="attempts"></div>
+        
+        <button class="guess-btn" onclick="resetGame()" style="margin-top: 10px;">بازی جدید 🔄</button>
+    </div>
+    
+    <script>
+        let randomNumber = Math.floor(Math.random() * 100) + 1;
+        let attempts = 0;
+        
+        function checkGuess() {
+            const guess = parseInt(document.getElementById('guess').value);
+            const messageDiv = document.getElementById('message');
+            
+            if (isNaN(guess) || guess < 1 || guess > 100) {
+                messageDiv.innerHTML = "❌ لطفا یک عدد بین 1 تا 100 وارد کن!";
+                messageDiv.style.background = "#ffcdd2";
+                return;
+            }
+            
+            attempts++;
+            document.getElementById('attempts').innerHTML = `تعداد حدس‌ها: ${attempts}`;
+            
+            if (guess === randomNumber) {
+                messageDiv.innerHTML = `🎉 آفرین! درست حدس زدی! عدد ${randomNumber} بود. 🎉`;
+                messageDiv.style.background = "#c8e6c9";
+                document.getElementById('guess').disabled = true;
+            } else if (guess < randomNumber) {
+                messageDiv.innerHTML = "📈 برو بالا! عدد بزرگتره...";
+                messageDiv.style.background = "#e3f2fd";
+            } else {
+                messageDiv.innerHTML = "📉 بیا پایین! عدد کوچیکتره...";
+                messageDiv.style.background = "#e3f2fd";
+            }
+        }
+        
+        function resetGame() {
+            randomNumber = Math.floor(Math.random() * 100) + 1;
+            attempts = 0;
+            document.getElementById('guess').value = '';
+            document.getElementById('guess').disabled = false;
+            document.getElementById('message').innerHTML = 'بازی جدید شروع شد!';
+            document.getElementById('message').style.background = "#f0f0f0";
+            document.getElementById('attempts').innerHTML = '';
+        }
+    </script>
+</body>
+</html>

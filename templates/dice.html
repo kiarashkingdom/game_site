@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تاس انداز</title>
+    <style>
+        body {
+            font-family: 'Tahoma', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .game-container {
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .dice {
+            font-size: 150px;
+            margin: 30px 0;
+            animation: roll 0.5s ease;
+        }
+        
+        @keyframes roll {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .roll-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-size: 20px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        
+        .history {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 15px;
+        }
+        
+        .back-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <button class="back-btn" onclick="location.href='/'">← بازگشت</button>
+        <h1>🎲 تاس انداز 🎲</h1>
+        
+        <div class="dice" id="dice">🎲</div>
+        
+        <button class="roll-btn" onclick="rollDice()">بنداز تاس!</button>
+        <button class="roll-btn" onclick="clearHistory()">پاک کردن تاریخچه</button>
+        
+        <div class="history">
+            <h3>تاریخچه پرتاب‌ها:</h3>
+            <div id="history"></div>
+        </div>
+    </div>
+    
+    <script>
+        let historyList = [];
+        
+        function rollDice() {
+            const dice = document.getElementById('dice');
+            const number = Math.floor(Math.random() * 6) + 1;
+            
+            const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+            const diceEmojis = ['🎲', '🎲', '🎲', '🎲', '🎲', '🎲'];
+            
+            dice.style.animation = 'none';
+            dice.offsetHeight;
+            dice.style.animation = 'roll 0.5s ease';
+            
+            setTimeout(() => {
+                dice.innerHTML = diceFaces[number - 1];
+                historyList.unshift(`پرتاب ${historyList.length + 1}: عدد ${number}`);
+                if (historyList.length > 10) historyList.pop();
+                updateHistory();
+            }, 250);
+        }
+        
+        function updateHistory() {
+            const historyDiv = document.getElementById('history');
+            if (historyList.length === 0) {
+                historyDiv.innerHTML = 'هنوز تاسی ننداختی...';
+            } else {
+                historyDiv.innerHTML = historyList.map(item => `<div>${item}</div>`).join('');
+            }
+        }
+        
+        function clearHistory() {
+            historyList = [];
+            updateHistory();
+            document.getElementById('dice').innerHTML = '🎲';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بازی حافظه</title>
+    <style>
+        body {
+            font-family: 'Tahoma', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .game-container {
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 800px;
+            width: 100%;
+        }
+        
+        .back-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .card {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .card.flipped {
+            background: white;
+            transform: scale(0.95);
+        }
+        
+        .card.matched {
+            visibility: hidden;
+            pointer-events: none;
+            opacity: 0;
+        }
+        
+        .stats {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        
+        @media (max-width: 600px) {
+            .cards-grid {
+                gap: 10px;
+            }
+            
+            .card {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <button class="back-btn" onclick="location.href='/'">← بازگشت</button>
+        <h1>🧠 بازی حافظه 🧠</h1>
+        
+        <div class="cards-grid" id="cardsGrid"></div>
+        
+        <div class="stats">
+            <div>تلاش‌ها: <span id="attempts">0</span></div>
+            <button class="back-btn" onclick="initGame()" style="margin-top: 10px;">شروع مجدد</button>
+        </div>
+    </div>
+    
+    <script>
+        const emojis = ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼'];
+        let cards = [];
+        let flippedCards = [];
+        let matchedCards = [];
+        let attempts = 0;
+        let canFlip = true;
+        
+        function initGame() {
+            const doubled = [...emojis, ...emojis];
+            cards = doubled.sort(() => Math.random() - 0.5);
+            flippedCards = [];
+            matchedCards = [];
+            attempts = 0;
+            canFlip = true;
+            document.getElementById('attempts').innerText = attempts;
+            renderCards();
+        }
+        
+        function renderCards() {
+            const grid = document.getElementById('cardsGrid');
+            grid.innerHTML = '';
+            
+            cards.forEach((emoji, index) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                if (flippedCards.includes(index)) card.classList.add('flipped');
+                if (matchedCards.includes(index)) card.classList.add('matched');
+                
+                if (flippedCards.includes(index) || matchedCards.includes(index)) {
+                    card.innerText = emoji;
+                } else {
+                    card.innerText = '?';
+                }
+                
+                card.onclick = () => flipCard(index);
+                grid.appendChild(card);
+            });
+        }
+        
+        function flipCard(index) {
+            if (!canFlip) return;
+            if (flippedCards.includes(index)) return;
+            if (matchedCards.includes(index)) return;
+            if (flippedCards.length === 2) return;
+            
+            flippedCards.push(index);
+            renderCards();
+            
+            if (flippedCards.length === 2) {
+                attempts++;
+                document.getElementById('attempts').innerText = attempts;
+                checkMatch();
+            }
+        }
+        
+        function checkMatch() {
+            const [first, second] = flippedCards;
+            
+            if (cards[first] === cards[second]) {
+                matchedCards.push(first, second);
+                flippedCards = [];
+                renderCards();
+                
+                if (matchedCards.length === cards.length) {
+                    setTimeout(() => {
+                        alert(`🎉 آفرین! بازی رو با ${attempts} تلاش بردی! 🎉`);
+                    }, 100);
+                }
+            } else {
+                canFlip = false;
+                setTimeout(() => {
+                    flippedCards = [];
+                    renderCards();
+                    canFlip = true;
+                }, 1000);
+            }
+        }
+        
+        initGame();
+    </script>
+</body>
+</html>
